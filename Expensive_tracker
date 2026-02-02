@@ -1,0 +1,166 @@
+import json
+import os
+from secrets import choice
+#File to store expenses
+Expenses_file = "Expenses_data.json"
+    #list to store expenses
+Expenses = []
+#load expenses from file
+def load_expenses():
+    #Load expenses from file
+    global Expenses
+    #Check if file exists
+    if os.path.exists(Expenses_file):
+        try:
+          with open(Expenses_file, "r") as file:
+                Expenses = json.load(file)         
+        except Exception as e:
+            print(f"Error loading expenses: {e}")
+#save expenses to file
+def save_expenses():
+    try:
+        #Save expenses to file
+        with open(Expenses_file, "w") as file: 
+            json.dump(Expenses, file, indent=4)
+            print(f"\n Saved {len(Expenses)} expenses to file.")
+    except Exception as e:
+        print(f"Error saving expenses: {e}")
+#menu display
+def Show_expenses():
+        print("\n\tPersonal Expenses Tracker")
+        print ("\n Expenses Tracker Menu:")
+        print ("1. Add Expenses")
+        print ("2. View All Expenses")
+        print ("3. View Total Cost of Expenses")
+        print ("4. View Expenses by Category")
+        print ("5. Save and Exit")
+   
+   #add expense     
+def add_expense ():
+    description = input("\nEnter expense description: ")
+    if description.lower() == 'q':
+        print("\n Program Exiting to main menu.")
+        return
+    amount = (input("Enter expense amount: "))
+    if amount.lower() == 'q':
+        print("\n Program Exiting to main menu.")
+        return
+    amount = float(amount)     
+    category = input("Enter expense category: ")
+    if category.lower() == 'q':
+        print("\n Program Exiting to main menu.")
+        return
+    #Add expense to list
+    Expenses.append({"description": description, "amount": amount, "category": category})
+    save_expenses()
+    print("\n Expense added successfully.")
+
+#view all expenses
+def view_all_expenses() :
+    #Display all expenses in tabular format
+    if not Expenses:
+        print("\n No expenses recorded.")
+        return
+    # Header
+    print(f"\n"+"="*70)
+    print(f"{'S.no':<5}{'Category':<15} {'Description':<20} {'Amount':<10}")
+    print("="*70)
+# Sort expenses by category
+    sorted_expenses = sorted(Expenses, key=lambda x: x['category'].lower())
+    current_category = ""
+    category_count = 0
+    grand_total = 0
+# Display expenses
+    for i, expense in enumerate(sorted_expenses, 1):
+        if expense['category'].lower() != current_category:
+           # New category header
+            if current_category != "":
+                print(""*70)
+                # Print category header
+            category_count += 1    
+            current_category = expense['category'].lower()
+            cat_display = expense['category'].upper()
+            s_no_display = str(category_count)
+            
+        else:
+            # Same category, no header
+            cat_display= ""
+            s_no_display= ""
+            # Print expense line
+        print(f" {s_no_display:<4}{cat_display:<15} {expense['description']:<20} Rs {expense['amount']:>10.2f}")
+        # Update grand total
+        grand_total += expense['amount']
+# Print grand total
+    print("="*70)
+    print(f"Total Items: {len(Expenses):<5} {'Grand Total':<31} Rs {grand_total:>10.2f}")
+    print("="*70)
+
+#total view    
+def view_total():
+    
+    total=sum(expense['amount']for expense in Expenses)
+    print("="*70)
+    print (f" Total spent: Rs{total:.2f}")
+    print("="*70)
+    
+    
+#view by category
+def view_by_category():
+     #Display expenses grouped by category
+     if not Expenses:
+         print(" No expenses recorded yet.") 
+         return
+     # Get unique categories
+     categories = set(expense['category'] for expense in Expenses)
+     
+     # Display categories
+     print("="*70)
+     print(f" Available categories: {', '.join(categories)}")
+     print("="*70)
+     
+     choice = input("Enter category to view expenses: ").lower()
+     
+     if choice not in categories:
+         print(f"\nError: Category '{choice}' not found. ")
+         return
+     print(f"\n Showing expenses for category: {choice.upper()}")
+     print("="*70)
+     print(f"{'S.no':<5}{'Description':<20} {'Amount':<10}")
+     print("="*70)
+     
+     categories_total = 0
+     view_total =1
+     for i, expense in enumerate(Expenses, 1):
+            if expense['category'].lower() == choice:
+                print(f" {view_total:<4}{expense['description']:<20} Rs {expense['amount']:>10.2f}")
+                categories_total += expense['amount']
+                view_total +=1
+     print("="*70)
+     print(f"{'Category Total:':<25} Rs {categories_total:>10.2f}")
+     print("="*70)
+   #main function  
+def main():
+
+   load_expenses()
+   while True:
+        Show_expenses()
+        choice = input("\nSelect an option (1-5):")
+        if choice == '1':
+          add_expense()
+        elif choice == '2':
+          view_all_expenses()
+        elif choice == '3':
+            view_total()
+        elif choice == '4':
+            view_by_category()
+        elif choice == '5':
+            save_expenses()
+            print("Expenses save and exiting.Goodby") 
+            break
+        else:
+            print("Invalid input!")
+          
+if __name__ == "__main__":
+    main()                           
+            
+         
