@@ -35,7 +35,7 @@ def Show_expenses():
         print ("4. View Expenses by Category")
         print ("5. Save and Exit")
    
-   #add expense     
+   #add expence   
 def add_expense ():
     description = input("\nEnter expense description: ")
     if description.lower() == 'q':
@@ -155,7 +155,7 @@ def main():
             view_by_category()
         elif choice == '5':
             save_expenses()
-            print("Expenses save and exiting.Goodby") 
+            print("Expenses saved and exiting.Goodby") 
             break
         else:
             print("Invalid input!")
