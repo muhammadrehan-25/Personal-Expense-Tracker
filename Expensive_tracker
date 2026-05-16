@@ -29,7 +29,7 @@ def save_expenses():
 def Show_expenses():
         print("\n\tPersonal Expenses Tracker")
         print ("\n Expenses Tracker Menu:")
-        print ("1. Add Expenses")
+        print ("1. Add Expense")
         print ("2. View All Expenses")
         print ("3. View Total Cost of Expenses")
         print ("4. View Expenses by Category")
@@ -108,7 +108,7 @@ def view_total():
 def view_by_category():
      #Display expenses grouped by category
      if not Expenses:
-         print(" No expenses recorded yet.") 
+         print(" No expenses found.") 
          return
      # Get unique categories
      categories = set(expense['category'] for expense in Expenses)
