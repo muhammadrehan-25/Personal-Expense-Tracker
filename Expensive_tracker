@@ -3,6 +3,7 @@ import os
 from secrets import choice
 #File to store expenses
 Expenses_file = "Expenses_data.json"
+
     #list to store expenses
 Expenses = []
 #load expenses from file
